@@ -3,17 +3,18 @@ import { Link as ReachLink } from "@reach/router";
 import {
   Heading,
   Flex,
-  Stack
+  Stack,
+  Text
 
 } from "@chakra-ui/layout";
 import { useColorMode } from "@chakra-ui/color-mode";
 import { Button } from "@chakra-ui/button";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { Avatar, AvatarBadge } from "@chakra-ui/avatar";
+import { Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from "@chakra-ui/popover";
 
 export const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
-  console.log(colorMode, "colorMode");
 
   return (
     <Flex
@@ -35,9 +36,20 @@ export const Header = () => {
         </Heading>
       </Flex>
       <Stack direction="row" spacing={4} alignItems="center">
-        <Avatar size="sm">
-          <AvatarBadge boxSize="1em" bg="green.500" />
-        </Avatar>
+        <Popover placement="top">
+          <PopoverTrigger>
+            <Avatar size="sm">
+              <AvatarBadge boxSize="1em" bg="green.500" />
+            </Avatar>
+          </PopoverTrigger>
+          <PopoverContent w={250}>
+            <PopoverArrow />
+            <PopoverBody>
+              <Text color={`mode.${colorMode}.text`} mb={5}>Welcome, <strong>Debby Powers</strong>!</Text>
+              <Button colorScheme="blue" size="sm">Log out</Button>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
         <Button aria-label="Light/Dark mode" onClick={toggleColorMode} bg="transparent">
           {colorMode === "light" ? <MoonIcon boxSize={6} /> : <SunIcon boxSize={6} />}
         </Button>
