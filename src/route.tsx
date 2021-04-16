@@ -6,6 +6,7 @@ import React, { Suspense } from "react";
 const Home = React.lazy(() => import("./components/home"));
 const NewCoupon = React.lazy(() => import("./components/new-coupon"));
 const NotFound = React.lazy(() => import("./components/not-found"));
+const Checkout = React.lazy(() => import("./components/checkout"));
 
 export default function Route() {
   return (
@@ -31,6 +32,7 @@ export default function Route() {
         <Router>
           <Home path="/" />
           <NewCoupon path="/new" />
+          <Checkout path="/checkout" />
           <NotFound path="*" />
         </Router>
       </Suspense>
