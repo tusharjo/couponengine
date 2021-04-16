@@ -1,30 +1,19 @@
-import { Button, IconButton } from "@chakra-ui/button";
-import { useColorMode } from "@chakra-ui/color-mode";
+import { IconButton } from "@chakra-ui/button";
 import { CopyIcon, EditIcon, SearchIcon, TimeIcon } from "@chakra-ui/icons";
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/input";
-import { Box, Heading, Text, Link, Stack, Badge } from "@chakra-ui/layout";
+import { Box, Heading, Stack, Badge } from "@chakra-ui/layout";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
 import { Tag } from "@chakra-ui/tag";
 import { Tooltip } from "@chakra-ui/tooltip";
-import { Link as ReachLink, RouteComponentProps } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
+import { useStorage } from "../../common/localStorage";
 
-const Home = (_: RouteComponentProps) => {
-  const { colorMode } = useColorMode();
+export const CouponDashboard = (_: RouteComponentProps) => {
+  const { apiStore } = useStorage();
+
+  console.log(apiStore, "api");
 
   return <Stack>
-    <Box p={10} backgroundColor={colorMode === "light" ? "blue.50" : "blue.900"}>
-      <Heading mb={4}>Welcome to Coupon Engine Dashboard</Heading>
-      <Text fontSize="xl">
-        Create and share your coupon code. Get Started Now!
-    </Text>
-      <Button size="lg" colorScheme="green" mt="24px" p={0}>
-        <Link as={ReachLink} to="/new" display="inline-block" p="5" sx={{
-          ":hover": {
-            textDecoration: "none",
-          }
-        }}>Create new coupon</Link>
-      </Button>
-    </Box>
     <Box p={10}>
       <Heading size="lg" pb="10"> List of Coupons</Heading>
       <Stack mb="5">
@@ -118,6 +107,4 @@ const Home = (_: RouteComponentProps) => {
       </Table>
     </Box>
   </Stack >
-}
-
-export default Home;
+};

@@ -6,14 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import customTheme from "./themes/theme";
 import CSSReset from '@chakra-ui/css-reset';
 import { ChakraProvider } from '@chakra-ui/react';
+import { StorageProvider } from "./common/localStorage";
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider theme={customTheme}>
-      <CSSReset />
-      <Main />
-    </ChakraProvider>
+    <StorageProvider>
+      <ChakraProvider theme={customTheme}>
+        <CSSReset />
+        <Main />
+      </ChakraProvider>
+    </StorageProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

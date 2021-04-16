@@ -2,24 +2,14 @@ import { Button } from "@chakra-ui/button";
 import { useColorMode } from "@chakra-ui/color-mode";
 import { FormLabel } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Heading, HStack, Stack } from "@chakra-ui/layout";
+import { Box, Flex, Heading, HStack, Stack } from "@chakra-ui/layout";
 import { Textarea } from "@chakra-ui/textarea";
 import { RouteComponentProps } from "@reach/router";
 import { Field, Form, Formik } from "formik";
-import Select from "react-select";
-
-const allProducts = [
-  {
-    label: "domain", text: "Domain"
-  },
-  { label: "hosting", text: "Hosting" },
-  { label: "server", text: "Server" }
-];
-
-const subCategory = { domain: ["biz", "com", "org"], hosting: ["SDH", "MDH"] } as any;
-
+import { useStorage } from "../common/localStorage";
 
 const NewCoupon = (_: RouteComponentProps) => {
+  const { apiStore } = useStorage();
   const { colorMode } = useColorMode();
 
   return <Stack>
@@ -27,9 +17,9 @@ const NewCoupon = (_: RouteComponentProps) => {
       <Heading mb={2}>Create A New Coupon</Heading>
     </Box>
     <br />
-    <Box width="60%" p={10} mx={100} boxShadow="md" border="1px" borderColor="gray.200" alignSelf="center">
+    <Box width="80%" p={10} mx={100} boxShadow="md" border="1px" borderColor="gray.200" alignSelf="center">
       <Formik
-        initialValues={{ couponcode: "", coupondescription: "", startdate: "", enddate: "", selectedProduct: [] }}
+        initialValues={{ couponcode: "", coupondescription: "", startdate: "", enddate: "", selectedProduct: [], allProducts: apiStore?.products ?? [] }}
         onSubmit={(values, actions) => {
           console.log({ values, actions });
           alert(JSON.stringify(values, null, 2));
@@ -71,16 +61,29 @@ const NewCoupon = (_: RouteComponentProps) => {
             <hr />
             <br />
 
-            {allProducts.map(product =>
-              <FormLabel><Field type="checkbox" name="selectedProduct" value={product.label} />{product.text}</FormLabel>
+            {values.allProducts.map((product: any) =>
+              <FormLabel><Field type="checkbox" name="selectedProduct" value={product} /><span style={{ marginRight: "5px" }} />{product}</FormLabel>
             )}
             <br />
 
-            {values.selectedProduct?.map((value: any) => <div>
+            {values.selectedProduct?.map((value: any) => <Box border="1px #aaa solid">
               <div>{value}</div>
-              <Select options={subCategory[value].map((text: any) => ({ value: text, label: text }))} />
+              <Flex>
+                <Field as="select" name="duration" width="100px">
+                  <option value="option1">New Orders (First Year Only)</option>
+                  <option value="option2">New Orders (For all durations))</option>
+                </Field>
+              with discount value
+              <Input as={Field} type="number" name="couponamount" placeholder="10" />
+                <Field as="select" name="duration">
+                  <option value="option1">%</option>
+                  <option value="option2">USD</option>
+                </Field>
+                {/* <Select options={subCategory[value].map((text: any) => ({ value: text, label: text }))} /> */}
+
+              </Flex>
               <Button onClick={() => { }}>Add Another</Button>
-            </div>
+            </Box>
             )}
             <Button type="submit" colorScheme="blue">Next</Button>
           </Form>
