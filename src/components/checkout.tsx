@@ -1,4 +1,5 @@
-import { Box, Grid, Heading } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
+import { Box, Flex, Grid, Heading, Spacer } from "@chakra-ui/layout";
 import {
   Table,
   TableCaption,
@@ -9,6 +10,23 @@ import {
   Td,
 } from "@chakra-ui/table";
 import { RouteComponentProps } from "@reach/router";
+
+const CouponCard = () => {
+  return (
+    <Box marginTop={5}>
+      <Flex>
+        <Heading size="sm">ABCDEF</Heading>
+        <Spacer />
+        <Button size="xs" variant="outline" colorScheme="green">
+          Apply
+        </Button>
+      </Flex>
+      <Box>
+        coupon description goes here.... coupon description goes here....
+      </Box>
+    </Box>
+  );
+};
 
 const Checkout = (_: RouteComponentProps) => {
   let items = [
@@ -105,53 +123,14 @@ const Checkout = (_: RouteComponentProps) => {
       >
         <Heading size="md">Placeholder Text</Heading>
         <Box overflow="scroll" h="500px" paddingRight={10}>
-          <Box marginTop={5}>
-            <Box>ABCDEF</Box>
-            <Box>
-              coupon description goes here.... coupon description goes here....
-              coupon description goes here.... coupon description goes here.....
-            </Box>
-          </Box>
-
-          <Box marginTop={5}>
-            <Box>ABCDEF</Box>
-            <Box>
-              coupon description goes here.... coupon description goes here....
-              coupon description goes here.... coupon description goes here.....
-            </Box>
-          </Box>
-
-          <Box marginTop={5}>
-            <Box>ABCDEF</Box>
-            <Box>
-              coupon description goes here.... coupon description goes here....
-              coupon description goes here.... coupon description goes here.....
-            </Box>
-          </Box>
-
-          <Box marginTop={5}>
-            <Box>ABCDEF</Box>
-            <Box>
-              coupon description goes here.... coupon description goes here....
-              coupon description goes here.... coupon description goes here.....
-            </Box>
-          </Box>
-
-          <Box marginTop={5}>
-            <Box>ABCDEF</Box>
-            <Box>
-              coupon description goes here.... coupon description goes here....
-              coupon description goes here.... coupon description goes here.....
-            </Box>
-          </Box>
-
-          <Box marginTop={5}>
-            <Box>ABCDEF</Box>
-            <Box>
-              coupon description goes here.... coupon description goes here....
-              coupon description goes here.... coupon description goes here.....
-            </Box>
-          </Box>
+          <CouponCard />
+          <CouponCard />
+          <CouponCard />
+          <CouponCard />
+          <CouponCard />
+          <CouponCard />
+          <CouponCard />
+          <CouponCard />
         </Box>
       </Box>
     </Grid>
