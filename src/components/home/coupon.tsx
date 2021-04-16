@@ -5,7 +5,7 @@ import { Box, Heading, Stack, Badge } from "@chakra-ui/layout";
 import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
 import { Tag } from "@chakra-ui/tag";
 import { Tooltip } from "@chakra-ui/tooltip";
-import { RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import { useStorage } from "../../common/localStorage";
 
 export const CouponDashboard = (_: RouteComponentProps) => {
@@ -51,7 +51,7 @@ export const CouponDashboard = (_: RouteComponentProps) => {
             <Td>{coupon.startdate} </Td>
             <Td>
               <Tooltip label="Edit Coupon" fontSize="md">
-                <IconButton aria-label="edit" size="sm" icon={<EditIcon />} mr="5" />
+                <IconButton aria-label="edit" size="sm" icon={<EditIcon />} mr="5" onClick={() => navigate(`/edit/${coupon.couponcode}`)} />
               </Tooltip>
               <Tooltip label="View Reports" fontSize="md">
                 <IconButton aria-label="viewreports" size="sm" icon={<TimeIcon />} mr="5" />

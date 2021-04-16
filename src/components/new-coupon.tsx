@@ -5,14 +5,27 @@ import { Input } from "@chakra-ui/input";
 import { Box, Flex, Heading, HStack, Stack } from "@chakra-ui/layout";
 import { Textarea } from "@chakra-ui/textarea";
 import { useToast } from "@chakra-ui/toast";
-import { RouteComponentProps } from "@reach/router";
+import { navigate, RouteComponentProps } from "@reach/router";
 import { Field, Form, Formik } from "formik";
 import { useStorage } from "../common/localStorage";
 
-const NewCoupon = (_: RouteComponentProps) => {
+type Props = {
+  couponName: string;
+};
+
+const NewCoupon: RouteComponentProps & any = ({ couponName }: Props) => {
   const { apiStore, setAPIStore } = useStorage();
   const { colorMode } = useColorMode();
   const toast = useToast();
+  const initialValues = couponName ? apiStore?.coupons?.find((coupon: any) => coupon.couponcode === couponName) : {
+    couponcode: "",
+    coupondescription: "",
+    startdate: "",
+    enddate: "",
+    selectedProduct: [],
+    allProducts: apiStore?.products ?? [],
+    appliedCoupon: {}
+  }
 
   return <Stack>
     <Box p={10} backgroundColor={colorMode === "light" ? "blue.50" : "blue.900"}>
@@ -21,17 +34,23 @@ const NewCoupon = (_: RouteComponentProps) => {
     <br />
     <Box width="80%" p={10} mx={100} boxShadow="md" border="1px" borderColor="gray.200" alignSelf="center">
       <Formik
-        initialValues={{
-          couponcode: "",
-          coupondescription: "",
-          startdate: "",
-          enddate: "",
-          selectedProduct: [],
-          allProducts: apiStore?.products ?? [],
-          appliedCoupon: {}
-        }}
+        initialValues={initialValues}
         onSubmit={(values) => {
-          if (!apiStore.hasOwnProperty("coupons")) {
+          if (couponName) {
+            let findCouponIndex = apiStore.coupons.findIndex((coupon: any) => coupon.couponcode === couponName);
+            apiStore.coupons[findCouponIndex] = values;
+            setAPIStore({ coupons: apiStore.coupons });
+            toast({
+              title: "Coupon code details updated successfully.",
+              position: "bottom-left",
+              description: "",
+              status: "success",
+              duration: 2000,
+              isClosable: true,
+            });
+            navigate("/");
+          }
+          else if (!apiStore.hasOwnProperty("coupons")) {
             setAPIStore({ coupons: [values] });
             toast({
               title: "Coupon code added successfully.",
@@ -41,6 +60,7 @@ const NewCoupon = (_: RouteComponentProps) => {
               duration: 2000,
               isClosable: true,
             });
+            navigate("/");
           }
           else if (apiStore?.coupons?.findIndex((coupon: any) => coupon.couponcode === values.couponcode) < 0) {
             setAPIStore({ coupons: [...apiStore?.coupons ?? [], values] });
@@ -52,6 +72,7 @@ const NewCoupon = (_: RouteComponentProps) => {
               duration: 2000,
               isClosable: true,
             });
+            navigate("/");
           }
           else {
             toast({
@@ -71,7 +92,7 @@ const NewCoupon = (_: RouteComponentProps) => {
             <br />
             <Box width="100%" mb={5}>
               <FormLabel>Coupon Code
-          <Input as={Field} name="couponcode" placeholder="eg: hosting101" required />
+          <Input as={Field} name="couponcode" placeholder="eg: hosting101" disabled={couponName?.length > 0} required />
               </FormLabel>
             </Box>
             <Box width="100%" mb={5}>

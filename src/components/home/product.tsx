@@ -62,8 +62,8 @@ export const ProductDashboard = (_: RouteComponentProps) => {
           {({ values, setFieldValue }) => (
             <Form>
               <FormLabel>
-                Create Products:
-                <InputGroup mt={2}>
+                <Heading size="md">Create Products:</Heading>
+                <InputGroup my={5}>
                   <Input as={Field} name="products" placeholder="Add product name" size="lg" />
                   <InputRightElement children={
                     <IconButton mt={2} mr={2} aria-label="Add Product" icon={<AddIcon color="blue.500" />} type="submit" cursor="pointer" color="gray.300" />} />
