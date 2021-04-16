@@ -6,13 +6,8 @@ import { Table, Tbody, Td, Th, Thead, Tr } from "@chakra-ui/table";
 import { Tag } from "@chakra-ui/tag";
 import { Tooltip } from "@chakra-ui/tooltip";
 import { RouteComponentProps } from "@reach/router";
-import { useStorage } from "../../common/localStorage";
 
 export const CouponDashboard = (_: RouteComponentProps) => {
-  const { apiStore } = useStorage();
-
-  console.log(apiStore, "api");
-
   return <Stack>
     <Box p={10}>
       <Heading size="lg" pb="10"> List of Coupons</Heading>
