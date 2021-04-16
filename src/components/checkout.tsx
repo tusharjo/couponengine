@@ -1,4 +1,5 @@
 import { Button } from "@chakra-ui/button";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import { Box, Flex, Grid, Heading, Spacer } from "@chakra-ui/layout";
 import {
   Table,
@@ -10,10 +11,20 @@ import {
   Td,
 } from "@chakra-ui/table";
 import { RouteComponentProps } from "@reach/router";
+import { Input, Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
+import { useState } from "react";
+import { Field, Form, Formik } from "formik";
 
 const CouponCard = () => {
   return (
-    <Box marginTop={5}>
+    <Box
+      marginTop={5}
+      border="1px"
+      borderColor="gray.200"
+      p={5}
+      boxShadow="md"
+      background="white"
+    >
       <Flex>
         <Heading size="sm">ABCDEF</Heading>
         <Spacer />
@@ -24,6 +35,15 @@ const CouponCard = () => {
       <Box>
         coupon description goes here.... coupon description goes here....
       </Box>
+      <Button
+        size="xs"
+        variant="link"
+        colorScheme="blue"
+        rightIcon={<ArrowForwardIcon />}
+        p={0}
+      >
+        Know More
+      </Button>
     </Box>
   );
 };
@@ -33,6 +53,8 @@ const Checkout = (_: RouteComponentProps) => {
     { product: "Domain ", tenure: 6, price: 1000 },
     { product: "Hosting ", tenure: 12, price: 2000 },
   ];
+
+  let [coupon, applyCoupon] = useState("");
 
   return (
     <Grid templateColumns="2fr 1fr" autoRows="max-content" marginTop="5%">
@@ -120,8 +142,63 @@ const Checkout = (_: RouteComponentProps) => {
         border="1px"
         borderColor="gray.200"
         alignSelf="center"
+        background="gray.50"
       >
         <Heading size="md">Placeholder Text</Heading>
+        {coupon ? (
+          <Flex
+            alignItems="center"
+            justifyContent="left"
+            paddingRight={10}
+            marginTop={5}
+            marginBottom={5}
+          >
+            <Box marginRight={5}>Coupon Applied</Box>
+            <Tag size="lg" colorScheme="blue" variant="solid">
+              <TagLabel>{coupon}</TagLabel>
+              <TagCloseButton onClick={() => applyCoupon("")} />
+            </Tag>
+          </Flex>
+        ) : (
+          <Formik
+            initialValues={{ couponcode: coupon }}
+            onSubmit={(values, actions) => {
+              console.log(values);
+              applyCoupon(values.couponcode);
+              actions.setSubmitting(false);
+            }}
+          >
+            {({ values, setFieldValue }) => (
+              <Form>
+                <Flex
+                  alignItems="center"
+                  justifyContent="space-between"
+                  paddingRight={10}
+                  marginTop={5}
+                  marginBottom={5}
+                >
+                  <Input
+                    placeholder="Enter coupon code"
+                    background="white"
+                    name="couponcode"
+                    w="70%"
+                    as={Field}
+                    required
+                  />
+                  <Button
+                    size="sm"
+                    variant="solid"
+                    colorScheme="green"
+                    type="submit"
+                  >
+                    Apply
+                  </Button>
+                </Flex>
+              </Form>
+            )}
+          </Formik>
+        )}
+
         <Box overflow="scroll" h="500px" paddingRight={10}>
           <CouponCard />
           <CouponCard />
