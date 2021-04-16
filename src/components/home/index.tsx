@@ -8,7 +8,11 @@ const Home = (_: RouteComponentProps) => {
   return <>
     <ProductDashboard />
     {apiStore?.products?.length > 0 ?
-      <CouponDashboard /> : null}
+      apiStore?.coupons?.length > 0 ?
+        <CouponDashboard />
+        : null
+      : null
+    }
   </>;
 }
 
