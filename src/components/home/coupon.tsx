@@ -44,7 +44,7 @@ export const CouponDashboard = (_: RouteComponentProps) => {
             <Td>{coupon.startdate} to {coupon.enddate}</Td>
             <Td maxW="200">
               {
-                coupon.allProducts.map((product: any) => <Tag m="1" key={product}>{product}</Tag>)
+                coupon.selectedProduct.map((product: any) => <Tag m="1" key={product}>{product}</Tag>)
               }
             </Td>
             <Td><Badge variant="outline" colorScheme="green">active</Badge></Td>
