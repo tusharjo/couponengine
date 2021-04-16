@@ -1,1 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
+
+select {
+  border: 1px #ddd solid;
+  border-radius: 5px;
+  padding: 8px !important;
+}

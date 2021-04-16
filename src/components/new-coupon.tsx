@@ -139,37 +139,53 @@ const NewCoupon: RouteComponentProps & any = ({ couponName }: Props) => {
               }} /><span style={{ marginRight: "5px" }} />{product}</FormLabel>
             )}
             <br />
-            {Object.entries(values.appliedCoupon).map(([product, details], index) => {
-              return <Box boxShadow="md" border="1px" borderColor="gray.200" p={5}>
+            {Object.keys(values.appliedCoupon).map((product) => {
+              return <Box boxShadow="md" border="1px" borderColor="gray.200" p={5} mb={5}>
                 <Box textTransform="uppercase" fontWeight="bold">{product}</Box>
                 <hr />
                 <br />
-                <Flex>
+                <Flex alignItems="center">
                   <Field as="select" name={`appliedCoupon.${product}.duration`} width="100px">
                     <option value="one">New Orders (First Year Only)</option>
                     <option value="all">New Orders (For all durations))</option>
                   </Field>
-                with discount value
-                <Input as={Field} type="number" name={`appliedCoupon.${product}.discount`} placeholder="10" width="100" />
+                  <span style={{ margin: "0 10px" }}>with discount value</span>
+                  <Input as={Field} type="number" name={`appliedCoupon.${product}.discount`} placeholder="10" width="100px" />
                   <Field as="select" name={`appliedCoupon.${product}.currency`}>
                     <option value="percentage">%</option>
                     <option value="USD">USD</option>
                   </Field>
-
                 </Flex>
-                <Button onClick={() => {
+                <Button mt={5} colorScheme="blackAlpha" onClick={() => {
                   setFieldValue("selectedProduct", values.selectedProduct.filter((_: any) => _ !== product));
                   setFieldValue("appliedCoupon", Object.fromEntries(Object.entries(values.appliedCoupon).filter(_ => _[0] !== product)))
                 }
                 }>Delete</Button>
               </Box>
             })}
-            <Button type="submit" colorScheme="blue">Next</Button>
+            <br />
+            <br />
+            <Heading size="md" mb={5}>Step 3: Set Coupon Limits</Heading>
+            <hr />
+            <br />
+            <FormLabel>
+              The number of times the coupon can be used in all:	<Input as={Field} type="number" name="couponlimit" placeholder="10" width="80px" />
+            </FormLabel>
+            <FormLabel>
+              The number of times each customer can use the coupon:	<Input as={Field} type="number" name="couponused" placeholder="1" width="80px" />
+            </FormLabel>
+            <FormLabel>
+              The no. of orders to which the coupon can be applied:		<Input as={Field} type="number" name="couponorders" placeholder="1" width="80px" />
+            </FormLabel>
+            <br />
+            <Button type="submit" colorScheme="blue" size="lg">Submit</Button>
           </Form>
         )}
       </Formik>
     </Box>
-  </Stack >
+    <br />
+    <br />
+  </Stack>
 }
 
 export default NewCoupon;
