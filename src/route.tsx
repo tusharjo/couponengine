@@ -32,6 +32,7 @@ export default function Route() {
         <Router>
           <Home path="/" />
           <NewCoupon path="/new" />
+          <NewCoupon path="/edit/:couponName" />
           <Checkout path="/checkout" />
           <NotFound path="*" />
         </Router>

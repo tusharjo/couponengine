@@ -8,17 +8,12 @@ import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/tag";
 import { Link as ReachLink, RouteComponentProps } from "@reach/router";
 import { Field, Form, Formik } from "formik";
 import { useStorage } from "../../common/localStorage";
-import { Button, useToast } from "@chakra-ui/react"
-
+import { Button, IconButton, useToast } from "@chakra-ui/react"
 
 export const ProductDashboard = (_: RouteComponentProps) => {
   const { colorMode } = useColorMode();
   const { apiStore, setAPIStore } = useStorage();
   const toast = useToast();
-
-
-  console.log(apiStore, "api");
-
   return <Stack>
     <Box p={10} backgroundColor={colorMode === "light" ? "blue.50" : "blue.900"}>
       <Heading mb={4}>Welcome to Coupon Engine Dashboard</Heading>
@@ -45,35 +40,33 @@ export const ProductDashboard = (_: RouteComponentProps) => {
     <Box px={10} pt={3} >
       <Box width="50%" p={10} boxShadow="md" border="1px" borderColor="gray.200" alignSelf="left">
         <Formik
+          enableReinitialize
           initialValues={{ products: "", productsArray: apiStore?.products ?? [] }}
-          onSubmit={(values, actions) => {
-            const { productsArray } = values;
-            setAPIStore({ products: productsArray });
+          onSubmit={(values) => {
+            const { products, productsArray } = values;
+
+            if (!values.productsArray.includes(values.products as never) && values.products !== "") {
+              setAPIStore({ products: [...productsArray, products] });
+            }
+            else {
+              toast({
+                title: "Cannot add duplicate or empty product.",
+                position: "bottom-left",
+                description: "",
+                status: "warning",
+                duration: 1000,
+                isClosable: true,
+              });
+            }
           }}>
-          {({ values, setFieldValue, touched }) => (
+          {({ values, setFieldValue }) => (
             <Form>
               <FormLabel>
-                Create Products:
-                <InputGroup mt={2}>
-                  <Input as={Field} name="products" placeholder="Add product name" />
+                <Heading size="md">Create Products:</Heading>
+                <InputGroup my={5}>
+                  <Input as={Field} name="products" placeholder="Add product name" size="lg" />
                   <InputRightElement children={
-                    <AddIcon cursor="pointer" onClick={() => {
-                      if (!values.productsArray.includes(values.products as never) && values.products !== "") {
-                        setFieldValue("productsArray", [...values.productsArray, values.products]);
-                        setAPIStore({ products: [...values.productsArray, values.products] });
-                      }
-                      else {
-                        toast({
-                          title: "Cannot add duplicate or empty product.",
-                          position: "bottom-left",
-                          description: "",
-                          status: "warning",
-                          duration: 1000,
-                          isClosable: true,
-                        });
-                      }
-                      setFieldValue("products", "");
-                    }} color="gray.300" />} />
+                    <IconButton mt={2} mr={2} aria-label="Add Product" icon={<AddIcon color="blue.500" />} type="submit" cursor="pointer" color="gray.300" />} />
                 </InputGroup>
               </FormLabel>
               <Box>
