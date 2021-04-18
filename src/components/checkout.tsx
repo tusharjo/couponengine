@@ -129,7 +129,7 @@ const Checkout = (_: RouteComponentProps) => {
               <Td textAlign="right" fontWeight="500">
                 Amount to be paid
               </Td>
-              <Td fontWeight="500">{coupon ? 2700 : 3000}</Td>
+              <Td fontWeight="500">{coupon ? 2800 : 3100}</Td>
             </Tr>
           </Tbody>
         </Table>
