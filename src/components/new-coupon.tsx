@@ -120,7 +120,7 @@ const NewCoupon: RouteComponentProps & any = ({ couponName }: Props) => {
             <hr />
             <br />
 
-            {values.allProducts.map((product: any) =>
+            {Object.entries(values.allProducts).map(([product, subcat]: [any, any]) =>
               <FormLabel><Field type="checkbox" name="selectedProduct" value={product} onChange={(e: any) => {
                 handleChange(e);
                 if (Object.keys(values.appliedCoupon).includes(e.target.value)) {
@@ -131,24 +131,44 @@ const NewCoupon: RouteComponentProps & any = ({ couponName }: Props) => {
                     [product]: {
                       currency: "USD",
                       duration: "one",
-                      discount: e.target.value
+                      discount: e.target.value,
+                      subcategories: subcat
                     }
                   })
                 }
-                console.log(values.appliedCoupon, "SP")
               }} /><span style={{ marginRight: "5px" }} />{product}</FormLabel>
             )}
             <br />
             {Object.keys(values.appliedCoupon).map((product) => {
+
               return <Box boxShadow="md" border="1px" borderColor="gray.200" p={5} mb={5}>
                 <Box textTransform="uppercase" fontWeight="bold">{product}</Box>
                 <hr />
                 <br />
                 <Flex alignItems="center">
+                  Choose product: <span style={{ marginRight: "5px" }} />
+                  <Field as="select" name={`appliedCoupon.${product}.subcategory`}>
+                    <option value="Select Product">Select Product</option>
+                    {
+                      Object.keys(values.appliedCoupon[product].subcategories).map(subcategory =>
+
+                        <option value={values.appliedCoupon[product].subcategories[subcategory]}>{subcategory}</option>
+                      )
+                    }
+                  </Field><span style={{ marginRight: "10px" }} />on<span style={{ marginRight: "10px" }} />
+
                   <Field as="select" name={`appliedCoupon.${product}.duration`} width="100px">
                     <option value="one">New Orders (First Year Only)</option>
-                    <option value="all">New Orders (For all durations))</option>
-                  </Field>
+                    <option value="all">New Orders (For all durations)</option>
+                  </Field><span style={{ marginRight: "10px" }} />
+                  {
+                    values.appliedCoupon?.[product]?.subcategory && <>with tenure<span style={{ marginRight: "5px" }} />
+                      <Field as="select" name={`appliedCoupon.${product}.subcategorytenure`}>
+                        {
+                          <option value={values.appliedCoupon[product].subcategory}>{values.appliedCoupon[product].subcategory}</option>
+                        }
+                      </Field></>
+                  }
                   <span style={{ margin: "0 10px" }}>with discount value</span>
                   <Input as={Field} type="number" name={`appliedCoupon.${product}.discount`} placeholder="10" width="100px" />
                   <Field as="select" name={`appliedCoupon.${product}.currency`}>

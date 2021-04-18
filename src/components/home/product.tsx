@@ -43,7 +43,7 @@ export const ProductDashboard = (_: RouteComponentProps) => {
       <Text fontSize="xl">
         Create and share your coupon code. Get Started Now!
       </Text>
-      {apiStore?.products?.length > 0 &&
+      {apiStore?.products && Object.keys(apiStore?.products)?.length > 0 &&
         <Button size="lg" colorScheme="green" mt="24px" p={0}>
           <Link as={ReachLink} to="/new" display="inline-block" p="5" sx={{
             ":hover": {
@@ -64,12 +64,20 @@ export const ProductDashboard = (_: RouteComponentProps) => {
       <Box width="50%" p={10} boxShadow="md" border="1px" borderColor="gray.200" alignSelf="left">
         <Formik
           enableReinitialize
-          initialValues={{ products: "", productsArray: apiStore?.products ?? [], selectbox: "root" }}
+          initialValues={{ parent: "domains", products: "", productsValue: "", productsArray: apiStore?.products ?? {}, selectbox: "root" }}
           onSubmit={(values) => {
-            const { products, productsArray } = values;
+            const { parent, products, productsValue } = values;
 
-            if (!values.productsArray.includes(values.products as never) && values.products !== "") {
-              setAPIStore({ products: [...productsArray, products] });
+            if (values.products !== "") {
+              setAPIStore({
+                products: {
+                  ...apiStore.products,
+                  [parent]: {
+                    ...apiStore.products?.[parent] ? apiStore.products[parent] : {},
+                    [products]: productsValue
+                  }
+                }
+              });
             }
             else {
               toast({
@@ -85,33 +93,50 @@ export const ProductDashboard = (_: RouteComponentProps) => {
           {({ values, setFieldValue }) => (
             <Form>
               <FormLabel>
-                <Heading size="md">Create Products:<hr style={{ margin: "10px 0" }} /></Heading>
+                <Heading size="md">Create Products:<hr style={{ margin: "10px 0 25px" }} /></Heading>
+                <Field as="select" name="parent" style={{ width: "100%" }}>
+                  <option value="domains">Domains</option>
+                  <option value="hosting">Hosting</option>
+                  <option value="servers">Servers</option>
+                </Field>
                 <InputGroup my={5}>
-                  <Input as={Field} name="products" placeholder="Product name" size="lg" mr={5} />
-                  <Input as={Field} name="productsValue" placeholder="Product value" size="lg" />
+                  <Input as={Field} name="products" placeholder="Product name" size="md" mr={3} required />
+                  <Input as={Field} name="productsValue" placeholder="Product duration (in months)" size="md" mr={3} required />
                 </InputGroup>
-                <Button type="submit" colorScheme="blue" onClick={() => setFieldValue("productsValue", "")}><AddIcon color="white" boxSize="3" mr={2} />Add</Button>
+                <Button type="submit" colorScheme="blue"><AddIcon color="white" boxSize="3" mr={2} />Add</Button>
               </FormLabel>
               <Box>
-                {values.productsArray.map((product: any) =>
-                  <Tag
-                    size="lg"
-                    key={product}
-                    borderRadius="full"
-                    variant="solid"
-                    colorScheme="green"
-                    mr={1}
-                    mb={1}
-                  >
-                    <TagLabel>{product}</TagLabel>
-                    <TagCloseButton onClick={
-                      () => {
-                        setFieldValue("productsArray", values.productsArray.filter((_: any) => _ !== product))
-                        setAPIStore({ products: values.productsArray.filter((_: any) => _ !== product) });
-                      }
-                    } />
-                  </Tag>
-                )}
+                {Object.entries(values.productsArray).map(([parent, products]: [any, any]) =>
+                  Object.keys(products).map(product =>
+                    <Tag
+                      size="lg"
+                      key={product}
+                      borderRadius="full"
+                      variant="solid"
+                      colorScheme="green"
+                      mr={1}
+                      mb={1}
+                    >
+                      <TagLabel>{parent} - {product}</TagLabel>
+                      <TagCloseButton onClick={
+                        () => {
+                          let updatedObj = apiStore.products[parent];
+                          delete updatedObj[product];
+                          console.log(updatedObj, "UO");
+                          setFieldValue("productsArray", {
+                            ...apiStore.products,
+                            [parent]: updatedObj
+                          })
+                          setAPIStore({
+                            products: {
+                              ...apiStore.products,
+                              [parent]: updatedObj
+                            }
+                          });
+                        }
+                      } />
+                    </Tag>
+                  ))}
               </Box>
             </Form>)}
         </Formik>
