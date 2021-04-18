@@ -10,12 +10,12 @@ import {
   Tr,
   Td,
 } from "@chakra-ui/table";
-import { RouteComponentProps } from "@reach/router";
 import { Input, Tag, TagCloseButton, TagLabel } from "@chakra-ui/react";
 import { useState } from "react";
 import { Field, Form, Formik } from "formik";
+import coupons from "../data/coupons.json";
 
-const CouponCard = () => {
+const CouponCard = (props) => {
   return (
     <Box
       marginTop={5}
@@ -26,15 +26,19 @@ const CouponCard = () => {
       background="white"
     >
       <Flex>
-        <Heading size="sm">DOMAINS10</Heading>
+        <Heading size="sm">{props.coupon.code}</Heading>
         <Spacer />
-        <Button size="xs" variant="outline" colorScheme="green">
+        <Button
+          size="xs"
+          variant="outline"
+          colorScheme="green"
+          onClick={() => props.handleClick(props.coupon.code)}
+          disabled={props.disabled}
+        >
           Apply
         </Button>
       </Flex>
-      <Box mt={2}>
-        Apply coupons for domains to get 10% off!
-      </Box>
+      <Box mt={2}>{props.coupon.description}</Box>
       <Button
         size="xs"
         variant="link"
@@ -49,10 +53,11 @@ const CouponCard = () => {
   );
 };
 
-const Checkout = (_: RouteComponentProps) => {
+const Checkout = (_) => {
   let items = [
-    { product: "Domain ", tenure: 6, price: 1000 },
-    { product: "Hosting ", tenure: 12, price: 2000 },
+    { product: "newdomain.com (.com Domain) ", tenure: 12, price: 1500 },
+    { product: "newdomain.net (.net Domain) ", tenure: 12, price: 1000 },
+    { product: "Shared Linux Hosting (Basic) ", tenure: 12, price: 2500 },
   ];
 
   let [coupon, applyCoupon] = useState("");
@@ -110,26 +115,28 @@ const Checkout = (_: RouteComponentProps) => {
               </Td>
               <Td paddingBottom="0">{100}</Td>
             </Tr>
-            {coupon && <Tr>
-              <Td paddingBottom="0"></Td>
-              <Td
-                paddingBottom="0"
-                textAlign="right"
-                color="green.400"
-                fontWeight="bold"
-              >
-                Coupon Applied - 10% off
-              </Td>
-              <Td paddingBottom="0" color="green.400" fontWeight="bold">
-                {300}
-              </Td>
-            </Tr>}
+            {coupon && (
+              <Tr>
+                <Td paddingBottom="0"></Td>
+                <Td
+                  paddingBottom="0"
+                  textAlign="right"
+                  color="green.400"
+                  fontWeight="bold"
+                >
+                  Coupon Applied
+                </Td>
+                <Td paddingBottom="0" color="green.400" fontWeight="bold">
+                  {750}
+                </Td>
+              </Tr>
+            )}
             <Tr>
               <Td></Td>
               <Td textAlign="right" fontWeight="500">
                 Amount to be paid
               </Td>
-              <Td fontWeight="500">{coupon ? 2800 : 3100}</Td>
+              <Td fontWeight="500">{coupon ? 4350 : 5100}</Td>
             </Tr>
           </Tbody>
         </Table>
@@ -147,16 +154,14 @@ const Checkout = (_: RouteComponentProps) => {
       >
         <Heading size="md">Apply Coupon</Heading>
         {coupon ? (
-          <Box
-            paddingRight={10}
-            marginTop={5}
-            marginBottom={5}
-          >
+          <Box paddingRight={10} marginTop={5} marginBottom={5}>
             <Tag size="lg" colorScheme="blue" variant="solid">
               <TagLabel>{coupon}</TagLabel>
               <TagCloseButton onClick={() => applyCoupon("")} />
             </Tag>
-            <Text mt={2} color="green.700" fontStyle="italic" fontSize="sm">Coupon Applied</Text>
+            <Text mt={2} color="green.700" fontStyle="italic" fontSize="sm">
+              Coupon Applied
+            </Text>
           </Box>
         ) : (
           <Formik
@@ -198,16 +203,24 @@ const Checkout = (_: RouteComponentProps) => {
         )}
 
         <br />
-        <Heading size="md">Coupons Available</Heading>
         <Box overflow="scroll" h="500px" paddingRight={10}>
-          <CouponCard />
-          <CouponCard />
-          <CouponCard />
-          <CouponCard />
-          <CouponCard />
-          <CouponCard />
-          <CouponCard />
-          <CouponCard />
+          <Heading size="md">Coupons Available</Heading>
+          {coupons.applicable.map((coupon) => (
+            <CouponCard
+              coupon={coupon}
+              handleClick={(code) => applyCoupon(code)}
+            />
+          ))}
+          <Heading size="md" marginTop={5}>
+            Other Offers
+          </Heading>
+          {coupons.suggestions.map((coupon) => (
+            <CouponCard
+              coupon={coupon}
+              handleClick={(code) => applyCoupon(code)}
+              disabled
+            />
+          ))}
         </Box>
       </Box>
     </Grid>

@@ -14,7 +14,9 @@ export const Footer = () => {
       borderTop={`1px ${colorMode === "light" ? "#dddddd" : "000000"} solid`}
     >
       <Text color={`mode.${colorMode}.text`}>
-        Thank you for using Coupon Engine!
+        {window.location.href.includes("checkout")
+          ? ""
+          : "Thank you for using Coupon Engine!"}
       </Text>
     </Box>
   );

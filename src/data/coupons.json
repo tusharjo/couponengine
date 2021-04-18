@@ -1,0 +1,33 @@
+{
+    "applicable":
+        [
+            {
+                "code": "DOMAINS10",
+                "description": "Get flat 10% off on .com domains"
+            },
+            {
+                "code": "DOMAINS20",
+                "description": "Get 20% off on .net domains"
+            },
+            {
+                "code": "HOSTING15",
+                "description": "Get 15% off on shared linux hosting"
+            }
+        ],
+    "suggestions":
+        [
+            {
+                "code" : "NEWBIZ20",
+                "description": "Get 20% off on the purchase of a .net domain with shared linux hosting"
+            },
+            {
+                "code" : "SALE36",
+                "description": "Get 40% off on the purchase of a .com domain for a 36 month tenure"
+            },
+            {
+                "code" : "SALE24",
+                "description": "Get 10% off on the purchase of a .com domain for a 36 month tenure"
+            }
+        ]
+
+}

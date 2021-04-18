@@ -1,17 +1,17 @@
 import React from "react";
 import { Link as ReachLink } from "@reach/router";
-import {
-  Heading,
-  Flex,
-  Stack,
-  Text
-
-} from "@chakra-ui/layout";
+import { Heading, Flex, Stack, Text } from "@chakra-ui/layout";
 import { useColorMode } from "@chakra-ui/color-mode";
 import { Button } from "@chakra-ui/button";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { Avatar, AvatarBadge } from "@chakra-ui/avatar";
-import { Popover, PopoverArrow, PopoverBody, PopoverContent, PopoverTrigger } from "@chakra-ui/popover";
+import {
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from "@chakra-ui/popover";
 
 export const Header = () => {
   const { colorMode, toggleColorMode } = useColorMode();
@@ -25,14 +25,18 @@ export const Header = () => {
       p={5}
       pl={10}
       pr={10}
-      bg="blue.500"
+      bg={window.location.href.includes("checkout") ? "teal.400" : "blue.500"}
       color="white"
       top={0}
       zIndex={2}
     >
       <Flex align="center">
         <Heading as="h1" size="xl" position="relative">
-          <ReachLink to="/">Coupon Engine</ReachLink>
+          <ReachLink to="/">
+            {window.location.href.includes("checkout")
+              ? "Bigrock"
+              : "Coupon Engine"}
+          </ReachLink>
         </Heading>
       </Flex>
       <Stack direction="row" spacing={4} alignItems="center">
@@ -45,13 +49,25 @@ export const Header = () => {
           <PopoverContent w={250}>
             <PopoverArrow />
             <PopoverBody>
-              <Text color={`mode.${colorMode}.text`} mb={5}>Welcome, <strong>Debby Powers</strong>!</Text>
-              <Button colorScheme="blue" size="sm">Log out</Button>
+              <Text color={`mode.${colorMode}.text`} mb={5}>
+                Welcome, <strong>Debby Powers</strong>!
+              </Text>
+              <Button colorScheme="blue" size="sm">
+                Log out
+              </Button>
             </PopoverBody>
           </PopoverContent>
         </Popover>
-        <Button aria-label="Light/Dark mode" onClick={toggleColorMode} bg="transparent">
-          {colorMode === "light" ? <MoonIcon boxSize={6} /> : <SunIcon boxSize={6} />}
+        <Button
+          aria-label="Light/Dark mode"
+          onClick={toggleColorMode}
+          bg="transparent"
+        >
+          {colorMode === "light" ? (
+            <MoonIcon boxSize={6} />
+          ) : (
+            <SunIcon boxSize={6} />
+          )}
         </Button>
       </Stack>
     </Flex>
