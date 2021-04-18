@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
-import { Box, Flex, Grid, Heading, Spacer } from "@chakra-ui/layout";
+import { Box, Flex, Grid, Heading, Spacer, Text } from "@chakra-ui/layout";
 import {
   Table,
   TableCaption,
@@ -26,14 +26,14 @@ const CouponCard = () => {
       background="white"
     >
       <Flex>
-        <Heading size="sm">ABCDEF</Heading>
+        <Heading size="sm">DOMAINS10</Heading>
         <Spacer />
         <Button size="xs" variant="outline" colorScheme="green">
           Apply
         </Button>
       </Flex>
-      <Box>
-        coupon description goes here.... coupon description goes here....
+      <Box mt={2}>
+        Apply coupons for domains to get 10% off!
       </Box>
       <Button
         size="xs"
@@ -41,6 +41,7 @@ const CouponCard = () => {
         colorScheme="blue"
         rightIcon={<ArrowForwardIcon />}
         p={0}
+        mt={2}
       >
         Know More
       </Button>
@@ -109,7 +110,7 @@ const Checkout = (_: RouteComponentProps) => {
               </Td>
               <Td paddingBottom="0">{100}</Td>
             </Tr>
-            <Tr>
+            {coupon && <Tr>
               <Td paddingBottom="0"></Td>
               <Td
                 paddingBottom="0"
@@ -117,18 +118,18 @@ const Checkout = (_: RouteComponentProps) => {
                 color="green.400"
                 fontWeight="bold"
               >
-                Coupon Applied
+                Coupon Applied - 10% off
               </Td>
               <Td paddingBottom="0" color="green.400" fontWeight="bold">
-                {100}
+                {300}
               </Td>
-            </Tr>
+            </Tr>}
             <Tr>
               <Td></Td>
               <Td textAlign="right" fontWeight="500">
                 Amount to be paid
               </Td>
-              <Td fontWeight="500">{3000}</Td>
+              <Td fontWeight="500">{coupon ? 2700 : 3000}</Td>
             </Tr>
           </Tbody>
         </Table>
@@ -144,26 +145,23 @@ const Checkout = (_: RouteComponentProps) => {
         alignSelf="center"
         background="gray.50"
       >
-        <Heading size="md">Placeholder Text</Heading>
+        <Heading size="md">Apply Coupon</Heading>
         {coupon ? (
-          <Flex
-            alignItems="center"
-            justifyContent="left"
+          <Box
             paddingRight={10}
             marginTop={5}
             marginBottom={5}
           >
-            <Box marginRight={5}>Coupon Applied</Box>
             <Tag size="lg" colorScheme="blue" variant="solid">
               <TagLabel>{coupon}</TagLabel>
               <TagCloseButton onClick={() => applyCoupon("")} />
             </Tag>
-          </Flex>
+            <Text mt={2} color="green.700" fontStyle="italic" fontSize="sm">Coupon Applied</Text>
+          </Box>
         ) : (
           <Formik
             initialValues={{ couponcode: coupon }}
             onSubmit={(values, actions) => {
-              console.log(values);
               applyCoupon(values.couponcode);
               actions.setSubmitting(false);
             }}
@@ -199,6 +197,8 @@ const Checkout = (_: RouteComponentProps) => {
           </Formik>
         )}
 
+        <br />
+        <Heading size="md">Coupons Available</Heading>
         <Box overflow="scroll" h="500px" paddingRight={10}>
           <CouponCard />
           <CouponCard />

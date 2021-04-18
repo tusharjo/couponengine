@@ -2,21 +2,44 @@ import { Alert, AlertIcon } from "@chakra-ui/alert";
 import { useColorMode } from "@chakra-ui/color-mode";
 import { FormLabel } from "@chakra-ui/form-control";
 import { AddIcon, } from "@chakra-ui/icons";
-import { Input, InputGroup, InputRightElement } from "@chakra-ui/input";
+import { Input, InputGroup } from "@chakra-ui/input";
 import { Box, Heading, Text, Link, Stack, } from "@chakra-ui/layout";
 import { Tag, TagCloseButton, TagLabel } from "@chakra-ui/tag";
 import { Link as ReachLink, RouteComponentProps } from "@reach/router";
 import { Field, Form, Formik } from "formik";
 import { useStorage } from "../../common/localStorage";
-import { Button, IconButton, useToast } from "@chakra-ui/react"
+import { Button, useToast } from "@chakra-ui/react";
+
 
 export const ProductDashboard = (_: RouteComponentProps) => {
   const { colorMode } = useColorMode();
   const { apiStore, setAPIStore } = useStorage();
   const toast = useToast();
+
+
+  // let MakeTree = ({ items }: any): any => Object.entries(items).map(([parent, child]) => {
+  //   if (Array.isArray(child)) {
+  //     return <li>{parent}
+  //       <ul>{child.map(ch => <span>{ch},</span>)}</ul>
+  //     </li>;
+  //   } else {
+  //     return <div>{parent}<ul><MakeTree items={child} /></ul></div>;
+  //   }
+  // });
+
+
+  // let getAllParents = (obj: any): any => Object.entries(obj).map((prod: any) => {
+  //   if (Array.isArray(prod[1])) {
+  //     return prod[0];
+  //   } else {
+  //     return [prod[0], ...getAllParents(prod[1])];
+  //   }
+  // });
+
   return <Stack>
     <Box p={10} backgroundColor={colorMode === "light" ? "blue.50" : "blue.900"}>
       <Heading mb={4}>Welcome to Coupon Engine Dashboard</Heading>
+      {/* <MakeTree items={prods} /> */}
       <Text fontSize="xl">
         Create and share your coupon code. Get Started Now!
       </Text>
@@ -41,7 +64,7 @@ export const ProductDashboard = (_: RouteComponentProps) => {
       <Box width="50%" p={10} boxShadow="md" border="1px" borderColor="gray.200" alignSelf="left">
         <Formik
           enableReinitialize
-          initialValues={{ products: "", productsArray: apiStore?.products ?? [] }}
+          initialValues={{ products: "", productsArray: apiStore?.products ?? [], selectbox: "root" }}
           onSubmit={(values) => {
             const { products, productsArray } = values;
 
@@ -62,12 +85,12 @@ export const ProductDashboard = (_: RouteComponentProps) => {
           {({ values, setFieldValue }) => (
             <Form>
               <FormLabel>
-                <Heading size="md">Create Products:</Heading>
+                <Heading size="md">Create Products:<hr style={{ margin: "10px 0" }} /></Heading>
                 <InputGroup my={5}>
-                  <Input as={Field} name="products" placeholder="Add product name" size="lg" />
-                  <InputRightElement children={
-                    <IconButton mt={2} mr={2} aria-label="Add Product" icon={<AddIcon color="blue.500" />} type="submit" cursor="pointer" color="gray.300" />} />
+                  <Input as={Field} name="products" placeholder="Product name" size="lg" mr={5} />
+                  <Input as={Field} name="productsValue" placeholder="Product value" size="lg" />
                 </InputGroup>
+                <Button type="submit" colorScheme="blue" onClick={() => setFieldValue("productsValue", "")}><AddIcon color="white" boxSize="3" mr={2} />Add</Button>
               </FormLabel>
               <Box>
                 {values.productsArray.map((product: any) =>
@@ -87,7 +110,8 @@ export const ProductDashboard = (_: RouteComponentProps) => {
                         setAPIStore({ products: values.productsArray.filter((_: any) => _ !== product) });
                       }
                     } />
-                  </Tag>)}
+                  </Tag>
+                )}
               </Box>
             </Form>)}
         </Formik>
